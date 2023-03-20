@@ -52,8 +52,12 @@ if __name__ == "__main__":
     else:
         CONFIG["TESTING"] = False
     
-    username = config['DEFAULT']['DIAVGEIA_API_USERNAME']
-    password = config['DEFAULT']['DIAVGEIA_API_PASSWORD']
+    try:
+        username = config['DEFAULT']['DIAVGEIA_API_USERNAME']
+        password = config['DEFAULT']['DIAVGEIA_API_PASSWORD']
+    except KeyError:
+        username = None
+        password = None
     
     if CONFIG["TESTING"]:
         CONFIG["BASE_URL"] = 'https://test3.diavgeia.gov.gr/luminapi/opendata/'
