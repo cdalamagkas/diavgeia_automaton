@@ -42,7 +42,7 @@ if __name__ == "__main__":
     CONFIG = {
         "RECEIPTS_DIR": config['DEFAULT']['DESTINATION_RECEIPTS'],
         "AAY_DIR": config['DEFAULT']['AAY_LOCATION'],
-        "FOREAS_EKDOSIS": config['ada_receipts']['FOREAS_EKDOSIS'],
+        "FOREAS_EKDOSIS": config['DEFAULT']['FOREAS_EKDOSIS'],
         "BASE_URL": None,
         "TESTING": config["DEFAULT"]["TESTING"]
     }
