@@ -1,3 +1,7 @@
+metadata.json
+config.ini
+summary_spreadsheet.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
