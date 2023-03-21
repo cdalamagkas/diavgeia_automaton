@@ -7,8 +7,10 @@ import json
 from datetime import datetime
 import configparser
 from helpers.ada_receipt import create_ada_receipt
+from helpers.get_issuer import get_issuer
 import glob
 import time
+import datetime
 
 
 DEFAULT_HEADERS = {'Accept': 'application/json','Connection': 'Keep-Alive'}
@@ -37,13 +39,11 @@ def validate(metadata):
 if __name__ == "__main__":
 
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    config.read("diavgeia_config.ini")
 
     CONFIG = {
         "RECEIPTS_DIR": config['DEFAULT']['DESTINATION_RECEIPTS'],
         "AAY_DIR": config['DEFAULT']['AAY_LOCATION'],
-        "FOREAS_EKDOSIS": config['DEFAULT']['FOREAS_EKDOSIS'],
-        "BASE_URL": None,
         "TESTING": config["DEFAULT"]["TESTING"]
     }
 
@@ -61,10 +61,13 @@ if __name__ == "__main__":
     
     if CONFIG["TESTING"]:
         CONFIG["BASE_URL"] = 'https://test3.diavgeia.gov.gr/luminapi/opendata/'
+        METADATA_FILE_PATH = './.testing/SampleDecisionMetadata.json'
         username = "10599_api"
         password = "User@10599"
+
     else:
         CONFIG["BASE_URL"] = 'https://diavgeia.gov.gr/opendata/'
+        METADATA_FILE_PATH = 'metadata.json'
         if username is None and password is None:
             invalid = True
             while True:
@@ -73,6 +76,11 @@ if __name__ == "__main__":
                 password = input('[>] Παρακαλώ δώστε τον κωδικό πρόσβασης στη Δι@ύγεια: ')
                 #TODO check whether credentials are valid
                 break
+
+    with open(METADATA_FILE_PATH, 'r') as file:
+        metadata = json.load(file)
+        CONFIG["ISSUER"] = get_issuer(metadata["organizationId"], CONFIG)
+        metadata["extraFieldValues"]["financialYear"] = datetime.date.today().year
 
     if os.name == "posix":
         DIR_SEPARATOR = "/"

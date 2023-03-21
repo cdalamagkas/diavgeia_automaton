@@ -80,7 +80,7 @@ def create_ada_receipt(ada, CONFIG):
     run = p.add_run('Φορέας έκδοσης:')
     run.font.bold = True
     p.add_run(' ')
-    p.add_run(CONFIG["FOREAS_EKDOSIS"])
+    p.add_run(CONFIG["ISSUER"])
 
     p = document.add_paragraph()
     run = p.add_run('Αριθμός πρωτοκόλλου:')
