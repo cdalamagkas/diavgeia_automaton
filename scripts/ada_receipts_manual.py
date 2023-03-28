@@ -29,11 +29,14 @@ if __name__ == "__main__":
         ada = input("[>] Παρακαλώ δώστε έναν ΑΔΑ: \n")        
         print("Δημιουργία απόδειξης, παρακαλώ περιμένετε...")
 
-        success = create_ada_receipt(ada, CONFIG)
-        if not success:
-            print("Παρακαλώ προσπαθήστε ξανά")
-            continue
-        else:
+        response = create_ada_receipt(ada, CONFIG)
+        if response["success"]:
+            print(f"[✓] H απόδειξη με όνομα {response['filename']} δημιουργήθηκε.")
             counter = counter + 1
-        
+        else:
+            if not response["connection_error"]:
+                print(f"[!!] Απέτυχε η δημιουργία απόδειξης με ΑΔΑ {response['ada']}. Ενδέχεται ο ΑΔΑ να είναι εσφαλμένος.")
+            else:
+                print(f"[!!] Απέτυχε η δημιουργία απόδειξης με ΑΔΑ {response['ada']} λόγω αποτυχίας σύνδεσης με τη Δι@ύγεια.")
+
         print("=============================================")

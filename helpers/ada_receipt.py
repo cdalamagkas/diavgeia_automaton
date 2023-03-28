@@ -48,14 +48,10 @@ def create_ada_receipt(ada, CONFIG):
         ada_payload = ada_payload.json()
 
         if 'errors' in ada_payload:
-            print('[!!] Ο ΑΔΑ που δώσατε δεν είναι έγκυρος ή υπάρχει πρόβλημα επικοινωνίας με τη Δι@ύγεια. Παρακαλώ προσπαθήστε ξανά.')
-            print('=============================================')
-            return False
+            return {"success": False, "connection_error": False, "ada": ada}
 
-    except requests.ConnectionError:
-        print("[!!] Σφάλμα σύνδεσης με τη Δι@ύγεια.")
-        print("====================================")
-        return False
+    except requests.ConnectionError:        
+        return {"success": False, "connection_error": True, "ada": ada}
     
     filename = ada_payload['protocolNumber'] + '-' + ada + '.docx'
     
@@ -111,7 +107,5 @@ def create_ada_receipt(ada, CONFIG):
     run.font.size = Pt(8.5)
 
     document.save(CONFIG["RECEIPTS_DIR"] + "/" + filename)
-    
-    print("[✓] Η απόδειξη με όνομα " + filename + " δημιουργήθηκε.")
-    
-    return True
+
+    return {"success": True, "ada": ada, "filename": filename}

@@ -25,11 +25,24 @@ if __name__ == "__main__":
         CONFIG["ISSUER"] = get_issuer(metadata["organizationId"], CONFIG)
     
     print("⚓ Αυτόματη δημιουργία αποδείξεων από αρχείο κειμένου ⚓")
+    counter = 1
     with open(SOURCE_TXT + "/" + FILENAME_TXT, 'r') as file:
         Lines = file.readlines()
         for line in Lines:
             line = line.strip()
             if line != "":
-                create_ada_receipt(line, CONFIG)
-    input("Press Enter to continue...")
+                response = create_ada_receipt(line, CONFIG)
+                if response["success"]:
+                    print(f"[{counter}][✓] H απόδειξη με όνομα {response['filename']} δημιουργήθηκε.")
+                    counter = counter + 1
+                else:
+                    if not response["connection_error"]:
+                        print(f"[!!] Απέτυχε η δημιουργία απόδειξης με ΑΔΑ {response['ada']}. Ενδέχεται ο ΑΔΑ να είναι εσφαλμένος.")
+                    else:
+                        print(f"[!!] Απέτυχε η δημιουργία απόδειξης με ΑΔΑ {response['ada']} λόγω αποτυχίας σύνδεσης με τη Δι@ύγεια.")
+        counter = counter -1
+        print("==========================")
+        print(f"[i] Δημιουργήθηκαν συνολικά {counter} αποδείξεις οι οποίες αποθηκεύτηκαν στη διαδρομή {CONFIG['RECEIPTS_DIR']}")
+        print("==========================")
+        input("[>] Πιέστε οποιοδήποτε πλήκτρο για να τερματιστεί το πρόγραμμα...")
 
